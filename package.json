@@ -1,0 +1,30 @@
+{
+  "name": "@hashchain/xmr-swap-model",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Research reference model of the ETH and XMR atomic swap described in the Hash Chain protocol spec. Not a working swap.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HashChainL0/xmr-swap-model"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "example:happy-path": "npm run --silent build && node dist/examples/happy-path.js",
+    "example:refund": "npm run --silent build && node dist/examples/refund.js",
+    "example:punish": "npm run --silent build && node dist/examples/punish.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
