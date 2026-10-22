@@ -43,8 +43,41 @@ With the defaults: confirmation wait 2400 s, T0 20400 s (5.67 h), claim window 2
 | `claim-window` | T1 - T0 >= xmrHolderOnlineMargin + inclusion time | The XMR holder needs time to notice ready and get a claim included |
 | `block-aligned` | T0 and T1 are multiples of the block time | Deadlines fall on block boundaries |
 
+## Detection latency, clock skew and recommended windows
+
+`recommendWindows` builds on the same idea and adds three things the plain calculator leaves out. Every default is an illustrative placeholder.
+
+- Monero confirmations times block time, scaled by a variance factor, as before.
+- Event detection latency. A watcher that polls event logs sees an event up to one poll late, and slow log reads can make a poll take about 30 s. One worst case poll is added each time a party has to notice something before acting: two before ready (the XMR holder sees the ETH lock, the ETH holder sees the last confirmation) and one in the claim window (the XMR holder sees ready).
+- Clock skew allowance. Added to `T0` and to the claim window.
+
+```
+T0 = ceil_to_block(lockAllowance + confirmationWait + 2 * poll + skew + ethHolderOnlineMargin)
+claimWindow = ceil_to_block(xmrHolderOnlineMargin + poll + skew + claimSafetyMargin)
+T1 = T0 + claimWindow
+```
+
+The result lists every component, a `claimSafetyMarginSec` and a `latestSafeClaimSec`, and runs the checks above on the recommended `T0` and `T1`. Run `npm run example:windows`.
+
+## Chain profiles
+
+Profiles are plain data in `src/profiles.ts`: `ethereum-l1` and `layer-2-rollup`. Each has a block time, claim inclusion blocks, a worst case event poll, whether a data posting fee counts against the gas limit, and an illustrative range for that fee in gas units. The values are labelled illustrative in the profile itself. Nothing here is measured from a network.
+
+## Layer 2 gas limits
+
+Some chains charge a data posting component, the cost of publishing the transaction data to a lower layer. When that component is charged inside the gas a transaction uses, a gas limit has to cover it, and it moves with conditions the contract does not control.
+
+```
+recommended gas limit = ceil((execution gas + data posting gas) * safety multiplier)
+```
+
+A fixed limit tuned before the component existed passes while the component is small and fails once it grows, with no change to the contract. `checkFixedLimit` reports the data component above which a fixed limit fails, and `sweepDataPosting` walks a fixed limit and the recommended limit across rising components. On a profile that does not charge the component inside gas, `recommendForProfile` ignores it.
+
+The same recommended limit feeds the claim gas drip, see [CLAIM-SAFETY.md](CLAIM-SAFETY.md).
+
 ## What this does not cover
 
 - Chain halts and censorship on the contract side. The spec notes a long halt may cause a refund instead of a claim.
 - How the margins should be chosen for real users. That is the research question.
+- Real latency, congestion and fee behaviour on any network. All profile numbers are placeholders.
 - Any link between these windows and a griefing bond or watchtower design.
