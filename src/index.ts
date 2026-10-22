@@ -23,3 +23,9 @@ export { classifyClaim, latestSafeClaimTime, recommendClaimSafetyMargin } from "
 export type { ClaimMarginInputs, ClaimMarginRecommendation } from "./claim-safety.js";
 export { requiredClaimFundsWei, recommendedDripWei, assessClaimRoute, relayerCounterpartyOutcome } from "./gas-drip.js";
 export type { GasDripInput, ClaimRouteAssessment, ClaimRouteContext, RouteVerdict, RelayerAttackOutcome } from "./gas-drip.js";
+export { CHAIN_PROFILES, getChainProfile } from "./profiles.js";
+export type { ChainProfile, ChainProfileId } from "./profiles.js";
+export { recommendGasLimit, recommendForProfile, checkFixedLimit, sweepDataPosting } from "./layer2.js";
+export type { GasLimitInput, GasLimitRecommendation, FixedLimitCheck, SweepRow } from "./layer2.js";
+export { defaultWindowInputs, recommendWindows } from "./windows.js";
+export type { WindowInputs, WindowComponent, WindowRecommendation } from "./windows.js";
