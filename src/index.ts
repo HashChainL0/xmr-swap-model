@@ -21,3 +21,5 @@ export { summarizeOutcome } from "./outcome.js";
 export type { Holdings, Outcome } from "./outcome.js";
 export { classifyClaim, latestSafeClaimTime, recommendClaimSafetyMargin } from "./claim-safety.js";
 export type { ClaimMarginInputs, ClaimMarginRecommendation } from "./claim-safety.js";
+export { requiredClaimFundsWei, recommendedDripWei, assessClaimRoute, relayerCounterpartyOutcome } from "./gas-drip.js";
+export type { GasDripInput, ClaimRouteAssessment, ClaimRouteContext, RouteVerdict, RelayerAttackOutcome } from "./gas-drip.js";
