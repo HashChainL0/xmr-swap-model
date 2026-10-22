@@ -2,7 +2,7 @@
   "name": "@hashchain/xmr-swap-model",
   "version": "0.1.0",
   "private": true,
-  "description": "Research reference model of the ETH and XMR atomic swap described in the Hash Chain protocol spec. Not a working swap.",
+  "description": "Research reference model of the ETH and XMR atomic swap described in the Hash Chain protocol spec, in both directions. Not a working swap.",
   "license": "UNLICENSED",
   "type": "module",
   "repository": {
@@ -20,7 +20,12 @@
     "test": "vitest run",
     "example:happy-path": "npm run --silent build && node dist/examples/happy-path.js",
     "example:refund": "npm run --silent build && node dist/examples/refund.js",
-    "example:punish": "npm run --silent build && node dist/examples/punish.js"
+    "example:punish": "npm run --silent build && node dist/examples/punish.js",
+    "example:xmr-to-eth": "npm run --silent build && node dist/examples/xmr-to-eth.js",
+    "example:eth-to-xmr": "npm run --silent build && node dist/examples/eth-to-xmr.js",
+    "example:gas-drip": "npm run --silent build && node dist/examples/gas-drip.js",
+    "example:unsafe-claim": "npm run --silent build && node dist/examples/unsafe-claim.js",
+    "example:windows": "npm run --silent build && node dist/examples/windows.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
