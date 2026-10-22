@@ -75,7 +75,7 @@ Taken from the spec: ETH holder (secret `a`, point `A`), XMR holder (secret `b`,
 
 ## Contributing
 
-Issues and pull requests are welcome, especially ones that find a state the model gets wrong. See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports go through [SECURITY.md](SECURITY.md). Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
+Issues and discussion are welcome, especially ones that find a state the model gets wrong. Code contributions are not accepted for now. See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports go through [SECURITY.md](SECURITY.md). Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Links
 
@@ -84,4 +84,4 @@ Issues and pull requests are welcome, especially ones that find a state the mode
 
 ## License
 
-Code licensed under the [MIT License](LICENSE). The protocol spec it models is licensed separately under CC BY 4.0. The Hash Chain name and logo are covered separately in the brand kit.
+Copyright (c) 2026 Hash Chain. All rights reserved. The source is published for reference and review only, and no permission is granted to copy, modify, distribute, sublicense or use it without prior written permission. See [LICENSE](LICENSE). The protocol spec it models is licensed separately under CC BY 4.0. The Hash Chain name and logo are covered separately in the brand kit.

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Research reference model of the ETH and XMR atomic swap described in the Hash Chain protocol spec. Not a working swap.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "type": "module",
   "repository": {
     "type": "git",
