@@ -16,6 +16,11 @@ export function createSwap(terms: SwapTerms): SwapState {
   if (!Number.isInteger(conf) || conf < 1) throw new RangeError("requiredConfirmations must be a positive integer");
   if (terms.ethAmountWei <= 0n) throw new RangeError("ethAmountWei must be positive");
   if (terms.xmrAmountPiconero <= 0n) throw new RangeError("xmrAmountPiconero must be positive");
+  const margin = terms.claimSafetyMarginSec;
+  if (margin !== undefined) {
+    if (!Number.isFinite(margin) || margin < 0) throw new RangeError("claimSafetyMarginSec must be a non-negative number");
+    if (margin >= t1 - t0) throw new RangeError("claimSafetyMarginSec must be shorter than the claim window t1DurationSec - t0DurationSec");
+  }
   return {
     phase: "None",
     terms,

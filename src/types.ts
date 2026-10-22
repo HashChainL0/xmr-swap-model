@@ -27,6 +27,37 @@ export interface SwapTerms {
    * true means a claim stays valid until the refund lands.
    */
   readonly lateClaimAllowed: boolean;
+  /**
+   * Seconds before T1 inside which a claim counts as unsafe. A claim landing in
+   * this margin or after T1 may revert and still publish b. Zero or absent
+   * means no margin. See docs/CLAIM-SAFETY.md.
+   */
+  readonly claimSafetyMarginSec?: number;
+}
+
+/**
+ * The ETH holder always locks first and the XMR holder always locks second.
+ * The direction only says which of them is the user and which is the operator.
+ */
+export type Direction = "eth-to-xmr" | "xmr-to-eth";
+
+export type Party = "user" | "operator";
+
+/** Who submits the claim transaction and who holds the claim secret b before it is public. */
+export type ClaimRoute = "self" | "self-with-gas-drip" | "relayed-by-counterparty";
+
+export type ClaimZone = "safe" | "unsafe-margin" | "late";
+
+export interface ClaimClassification {
+  readonly zone: ClaimZone;
+  /** T1 minus the time of the attempt. Negative once T1 has passed. */
+  readonly secondsToDeadline: number;
+  readonly marginSec: number;
+  /** True when inclusion could slip past T1 and the transaction revert. */
+  readonly mayRevert: boolean;
+  /** A reverted or rejected claim still carries b in its data. */
+  readonly revealsSecretIfReverted: boolean;
+  readonly explanation: string;
 }
 
 export interface SwapState {
@@ -94,6 +125,10 @@ export interface TraceEntry {
   readonly error: TransitionError | null;
   readonly available: readonly SwapEventType[];
   readonly note: string | null;
+  /** Set for Claim events when the swap has a T1. */
+  readonly claimSafety: ClaimClassification | null;
+  /** True when a rejected claim still put b where the counterparty can read it. */
+  readonly leaksB: boolean;
 }
 
 export interface ScenarioStep {
@@ -107,10 +142,20 @@ export interface Scenario {
   readonly description: string;
   readonly terms: SwapTerms;
   readonly steps: readonly ScenarioStep[];
+  /** Set by the per direction scenarios. Roles are the same in both directions. */
+  readonly direction?: Direction;
+  /** Defaults to "self". */
+  readonly claimRoute?: ClaimRoute;
 }
 
 export interface ScenarioResult {
   readonly scenario: string;
   readonly trace: readonly TraceEntry[];
   readonly finalState: SwapState;
+  readonly direction: Direction | null;
+  readonly claimRoute: ClaimRoute;
+  /** True when b became readable to the ETH holder without a valid claim. */
+  readonly bExposed: boolean;
+  /** Step numbers of claims inside the safety margin or after T1. */
+  readonly unsafeClaimSteps: readonly number[];
 }

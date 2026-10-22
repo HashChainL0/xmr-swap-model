@@ -10,4 +10,14 @@ export {
 } from "./timelocks.js";
 export type { TimelockConfig, TimelockPlan, TimelockComponent, TimelockCheck, TimelockReport } from "./timelocks.js";
 export { runScenario, formatTrace } from "./simulate.js";
-export { defaultTerms, happyPath, refund, punish, scenarios } from "./scenarios.js";
+export {
+  defaultTerms, happyPath, refund, punish, scenarios,
+  marginTerms, defaultClaimSafetyMarginSec, directionScenarios, claimSafetyScenarios, gasDripClaim,
+  relayedClaimByCounterparty, directionScenarioList, claimSafetyScenarioList, allScenarios,
+} from "./scenarios.js";
+export { DIRECTIONS, directionInfo, partyOf, fundsLocked } from "./directions.js";
+export type { DirectionInfo, LockedFunds } from "./directions.js";
+export { summarizeOutcome } from "./outcome.js";
+export type { Holdings, Outcome } from "./outcome.js";
+export { classifyClaim, latestSafeClaimTime, recommendClaimSafetyMargin } from "./claim-safety.js";
+export type { ClaimMarginInputs, ClaimMarginRecommendation } from "./claim-safety.js";
