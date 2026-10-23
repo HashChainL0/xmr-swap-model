@@ -62,3 +62,34 @@ describe("relayerCounterpartyOutcome", () => {
     expect(() => relayerCounterpartyOutcome(Number.NaN, 1)).toThrow(RangeError);
   });
 });
+
+describe("drip rounding and bounds", () => {
+  it("a buffer of exactly 1x returns the required funds with no rounding", () => {
+    const base = requiredClaimFundsWei(123_457, 7n);
+    expect(recommendedDripWei({ claimGasLimit: 123_457, maxFeePerGasWei: 7n, feeBufferBps: 10_000 })).toBe(base);
+  });
+  it("never drips less than the required funds, for any buffer from 1x", () => {
+    for (const bps of [10_000, 10_001, 10_500, 12_345, 20_000, 99_999]) {
+      for (const fee of [1n, 3n, 7n, 1_000_000_007n]) {
+        const need = requiredClaimFundsWei(21_001, fee);
+        const drip = recommendedDripWei({ claimGasLimit: 21_001, maxFeePerGasWei: fee, feeBufferBps: bps });
+        expect(drip).toBeGreaterThanOrEqual(need);
+      }
+    }
+  });
+  it("rounds up by less than one wei over the exact scaled value", () => {
+    const drip = recommendedDripWei({ claimGasLimit: 3, maxFeePerGasWei: 1n, feeBufferBps: 10_001 });
+    // 3 * 10001 / 10000 = 3.0003, which rounds up to 4
+    expect(drip).toBe(4n);
+    const exact = recommendedDripWei({ claimGasLimit: 10_000, maxFeePerGasWei: 1n, feeBufferBps: 10_001 });
+    expect(exact).toBe(10_001n);
+  });
+  it("rejects a non-integer or non-finite buffer", () => {
+    for (const feeBufferBps of [10_000.5, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(() => recommendedDripWei({ claimGasLimit: 10, maxFeePerGasWei: 1n, feeBufferBps })).toThrow(RangeError);
+    }
+  });
+  it("rejects a negative max fee", () => {
+    expect(() => requiredClaimFundsWei(10, -1n)).toThrow(RangeError);
+  });
+});
