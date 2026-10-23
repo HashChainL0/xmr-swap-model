@@ -152,3 +152,60 @@ describe("simulator flags", () => {
     expect(runScenario(base).trace.every((t) => t.claimSafety === null && !t.leaksB)).toBe(true);
   });
 });
+
+describe("claim safety properties", () => {
+  const t1 = 10_000;
+  const margins = [0, 1, 60, 300, 3_600];
+  const nows = [0, 1, 5_000, 9_000, 9_699, 9_700, 9_999, 10_000, 10_001, 20_000];
+
+  it("zone only moves from safe to unsafe-margin to late as time passes", () => {
+    const rank = { safe: 0, "unsafe-margin": 1, late: 2 } as const;
+    for (const m of margins) {
+      let last = 0;
+      for (const now of nows) {
+        const r = rank[classifyClaim(t1, now, m).zone];
+        expect(r).toBeGreaterThanOrEqual(last);
+        last = r;
+      }
+    }
+  });
+  it("a claim is safe exactly when it is strictly before the latest safe time", () => {
+    for (const m of margins) {
+      const latest = latestSafeClaimTime(t1, m);
+      for (const now of nows) {
+        expect(classifyClaim(t1, now, m).zone === "safe").toBe(now < latest);
+      }
+    }
+  });
+  it("mayRevert and revealsSecretIfReverted agree with the zone", () => {
+    for (const m of margins) {
+      for (const now of nows) {
+        const c = classifyClaim(t1, now, m);
+        expect(c.mayRevert).toBe(c.zone !== "safe");
+        expect(c.revealsSecretIfReverted).toBe(c.mayRevert);
+      }
+    }
+  });
+  it("a larger margin never makes a claim safer", () => {
+    for (const now of nows) {
+      let wasSafe = true;
+      for (const m of margins) {
+        const safe = classifyClaim(t1, now, m).zone === "safe";
+        if (!wasSafe) expect(safe).toBe(false);
+        wasSafe = safe;
+      }
+    }
+  });
+  it("the recommended margin is a whole number of blocks and covers its parts", () => {
+    for (const blockTimeSec of [2, 7, 12]) {
+      for (const congestionFactor of [1, 1.5, 3]) {
+        const r = recommendClaimSafetyMargin({
+          inclusionBlocks: 20, blockTimeSec, congestionFactor, detectionLatencySec: 30, clockSkewSec: 30,
+        });
+        expect(r.marginSec % blockTimeSec).toBe(0);
+        expect(r.marginSec).toBeGreaterThanOrEqual(r.inclusionSec + 60);
+        expect(r.marginSec).toBeLessThan(r.inclusionSec + 60 + blockTimeSec);
+      }
+    }
+  });
+});
