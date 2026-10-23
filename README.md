@@ -94,6 +94,7 @@ Taken from the spec: ETH holder (secret `a`, point `A`), XMR holder (secret `b`,
 | `docs/CLAIM-SAFETY.md` | The claim safety rule, gas drip and relayed claims |
 | `docs/CORRIDORS.md` | The three direct corridors and what changes between them |
 | `docs/API.md` | Public exports by module, conventions and error handling |
+| `docs/GLOSSARY.md` | The terms used in the code and the docs |
 
 ## Spec
 
