@@ -22,6 +22,7 @@ export interface TimelockConfig {
   readonly claimInclusionBlocks: number;
 }
 
+/** Placeholder defaults for every field of `TimelockConfig`. Illustrative, not research results. */
 export const DEFAULT_TIMELOCK_CONFIG: TimelockConfig = {
   ethSideBlockTimeSec: 12,
   moneroBlockTimeSec: 120,
@@ -62,6 +63,12 @@ export interface TimelockReport {
   readonly checks: readonly TimelockCheck[];
 }
 
+/**
+ * Merge overrides into the defaults and validate the result.
+ * Throws a `RangeError` naming the first field that is out of range:
+ * durations and block counts must be positive, margins may be zero, and the
+ * block counts must be integers.
+ */
 export function resolveConfig(partial: Partial<TimelockConfig> = {}): TimelockConfig {
   const config = { ...DEFAULT_TIMELOCK_CONFIG, ...partial };
   const positive: (keyof TimelockConfig)[] = [
@@ -101,6 +108,11 @@ export function minimumClaimWindowSec(c: TimelockConfig): number {
   return c.xmrHolderOnlineMarginSec + c.claimInclusionBlocks * c.ethSideBlockTimeSec;
 }
 
+/**
+ * Compute T0 and T1 as offsets from the ETH lock, both rounded up to whole
+ * blocks of the swap contract chain. Returns the plan with one explained
+ * component per part. Throws a `RangeError` for an invalid config.
+ */
 export function computeTimelocks(partial: Partial<TimelockConfig> = {}): TimelockPlan {
   const c = resolveConfig(partial);
   const confirmWait = c.requiredConfirmations * c.moneroBlockTimeSec * c.moneroBlockVarianceFactor;
@@ -139,6 +151,11 @@ export function computeTimelocks(partial: Partial<TimelockConfig> = {}): Timeloc
   };
 }
 
+/**
+ * Check a pair of offsets against the constraints in the config. Returns one
+ * check per constraint, each with an explanation, and never throws for bad
+ * T0 or T1 values. A config that is out of range still throws a `RangeError`.
+ */
 export function validateTimelocks(
   t0Sec: number,
   t1Sec: number,
