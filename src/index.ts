@@ -29,3 +29,5 @@ export { recommendGasLimit, recommendForProfile, checkFixedLimit, sweepDataPosti
 export type { GasLimitInput, GasLimitRecommendation, FixedLimitCheck, SweepRow } from "./layer2.js";
 export { defaultWindowInputs, recommendWindows } from "./windows.js";
 export type { WindowInputs, WindowComponent, WindowRecommendation } from "./windows.js";
+export { CORRIDORS, corridorList, getCorridor, corridorProfile, corridorWindows } from "./corridors.js";
+export type { Corridor, CorridorId } from "./corridors.js";

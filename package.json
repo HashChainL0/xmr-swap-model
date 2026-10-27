@@ -25,7 +25,8 @@
     "example:eth-to-xmr": "npm run --silent build && node dist/examples/eth-to-xmr.js",
     "example:gas-drip": "npm run --silent build && node dist/examples/gas-drip.js",
     "example:unsafe-claim": "npm run --silent build && node dist/examples/unsafe-claim.js",
-    "example:windows": "npm run --silent build && node dist/examples/windows.js"
+    "example:windows": "npm run --silent build && node dist/examples/windows.js",
+    "example:corridors": "npm run --silent build && node dist/examples/corridors.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
