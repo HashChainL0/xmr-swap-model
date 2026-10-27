@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  CHAIN_PROFILES, CORRIDORS, DIRECTIONS, corridorList, corridorProfile, corridorWindows, getCorridor, isCorridorId, parseCorridorId, recommendWindows,
+  CHAIN_PROFILES, CORRIDORS, DIRECTIONS, corridorGasLimit, corridorList, corridorProfile, corridorWindows, getCorridor, isCorridorId, parseCorridorId, recommendWindows,
 } from "../src/index.js";
 import type { CorridorId } from "../src/index.js";
 
@@ -57,5 +57,23 @@ describe("corridors", () => {
     expect(() => getCorridor("constructor" as CorridorId)).toThrow(RangeError);
     expect(() => corridorProfile("nope" as CorridorId)).toThrow(RangeError);
     expect(() => corridorWindows("nope" as CorridorId)).toThrow(RangeError);
+  });
+  it("claim gas limit counts the data component only where the profile charges it in gas", () => {
+    const eth = corridorGasLimit("ethereum", 100_000, 1.2);
+    expect(eth.input.dataPostingGas).toBe(0);
+    expect(eth.recommendedGasLimit).toBe(120_000);
+    for (const id of ["robinhood-chain", "base"] as const) {
+      const r = corridorGasLimit(id, 100_000, 1.2);
+      expect(r.input.dataPostingGas).toBe(CHAIN_PROFILES["layer-2-rollup"].dataPostingGasHigh);
+      expect(r.recommendedGasLimit).toBe(Math.ceil((100_000 + 400_000) * 1.2));
+      expect(r.recommendedGasLimit).toBeGreaterThan(eth.recommendedGasLimit);
+    }
+  });
+  it("claim gas limit accepts an explicit data component and validates inputs", () => {
+    expect(corridorGasLimit("base", 100_000, 1, 20_000).recommendedGasLimit).toBe(120_000);
+    expect(corridorGasLimit("ethereum", 100_000, 1, 20_000).recommendedGasLimit).toBe(100_000);
+    expect(() => corridorGasLimit("base", 0, 1)).toThrow(RangeError);
+    expect(() => corridorGasLimit("base", 100_000, 0.5)).toThrow(RangeError);
+    expect(() => corridorGasLimit("nope" as CorridorId, 100_000, 1)).toThrow(RangeError);
   });
 });

@@ -46,3 +46,7 @@ for (const c of corridorList()) {
 ```
 
 `corridorWindows(id, overrides)` takes the same optional inputs as `recommendWindows`, except the profile, which the corridor supplies.
+
+`corridorGasLimit(id, executionGas, safetyMultiplier, dataPostingGas?)` sizes the claim gas limit for a corridor. It adds the data posting component only where the corridor's profile charges it inside the gas limit, so the first two corridors need a larger limit than the third for the same call. When `dataPostingGas` is left out it uses the high end of the profile's illustrative range.
+
+`parseCorridorId(value)` narrows a string such as a command line argument to a corridor id and throws a `RangeError` listing the valid ids otherwise. `getCorridor`, `corridorProfile`, `corridorWindows` and `corridorGasLimit` reject an unknown id the same way.

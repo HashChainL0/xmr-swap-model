@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Vitest suite for corridor order, direct routing, profile assignment and window validity.
 - `isCorridorId` and `parseCorridorId` to narrow runtime strings to a corridor id. `parseCorridorId` throws a `RangeError` that lists the valid ids.
 
+- `corridorGasLimit`, the claim gas limit for a corridor. The data posting component counts only where the corridor profile charges it inside the gas limit. The `corridors` example prints it.
+
 ### Changed
 
 - `getCorridor`, `corridorProfile` and `corridorWindows` now throw a `RangeError` for an unknown corridor id instead of failing later on an undefined value.

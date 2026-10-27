@@ -1,5 +1,7 @@
 import { CHAIN_PROFILES } from "./profiles.js";
 import type { ChainProfile, ChainProfileId } from "./profiles.js";
+import { recommendForProfile } from "./layer2.js";
+import type { GasLimitRecommendation } from "./layer2.js";
 import { recommendWindows } from "./windows.js";
 import type { WindowInputs, WindowRecommendation } from "./windows.js";
 import { DIRECTIONS } from "./directions.js";
@@ -99,4 +101,19 @@ export function corridorProfile(id: CorridorId): ChainProfile {
 /** T0, T1 and the claim safety margin for one corridor, with optional overrides of any window input. */
 export function corridorWindows(id: CorridorId, overrides: Partial<Omit<WindowInputs, "profile">> = {}): WindowRecommendation {
   return recommendWindows({ ...overrides, profile: corridorProfile(id) });
+}
+
+/**
+ * Claim gas limit for one corridor. The data posting component is counted only
+ * when the corridor's profile charges it inside the gas limit, so the same
+ * call needs a larger limit in the first two corridors than in the third.
+ * `dataPostingGas` defaults to the high end of the profile's illustrative range.
+ */
+export function corridorGasLimit(
+  id: CorridorId,
+  executionGas: number,
+  safetyMultiplier: number,
+  dataPostingGas?: number,
+): GasLimitRecommendation {
+  return recommendForProfile(corridorProfile(id), executionGas, safetyMultiplier, dataPostingGas);
 }
