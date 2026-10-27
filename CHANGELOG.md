@@ -4,6 +4,14 @@ All notable changes to this repository are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions describe the state of the model, not a deployed protocol.
 
+## [Unreleased]
+
+### Added
+
+- Corridors in `src/corridors.ts`: direct ETH<>XMR pairs in priority order, Robinhood Chain first, Base second and Ethereum mainnet third. Each corridor uses one chain profile, offers both directions and never routes through another chain. `corridorList`, `getCorridor`, `corridorProfile` and `corridorWindows` expose them.
+- `docs/CORRIDORS.md`, the `corridors` example and the `example:corridors` npm script.
+- Vitest suite for corridor order, direct routing, profile assignment and window validity.
+
 ## [0.2.0] - 2026-10-22
 
 ### Added

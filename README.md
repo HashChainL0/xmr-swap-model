@@ -44,6 +44,7 @@ npm run example:eth-to-xmr
 npm run example:gas-drip
 npm run example:unsafe-claim
 npm run example:windows
+npm run example:corridors
 ```
 
 Examples compile to `dist/` with `tsc` and run with plain `node`. There are no runtime dependencies.
@@ -78,6 +79,7 @@ Taken from the spec: ETH holder (secret `a`, point `A`), XMR holder (secret `b`,
 | `src/timelocks.ts` | T0 and T1 calculator and constraint checks |
 | `src/windows.ts` | Window calculator with detection latency and clock skew |
 | `src/profiles.ts` | Chain profiles as plain data, illustrative defaults |
+| `src/corridors.ts` | Direct ETH<>XMR corridors in priority order: Robinhood Chain, Base, Ethereum mainnet |
 | `src/layer2.ts` | Gas limit calculator for a data posting component |
 | `src/claim-safety.ts` | Claim classification and safety margin |
 | `src/gas-drip.ts` | Gas drip amount and claim route assessment |
@@ -90,6 +92,7 @@ Taken from the spec: ETH holder (secret `a`, point `A`), XMR holder (secret `b`,
 | `docs/STATE-MACHINE.md` | Diagram, transition table, both directions, modelling choices |
 | `docs/PARAMETERS.md` | Timelock math, windows, profiles, gas limits |
 | `docs/CLAIM-SAFETY.md` | The claim safety rule, gas drip and relayed claims |
+| `docs/CORRIDORS.md` | The three direct corridors and what changes between them |
 
 ## Spec
 
