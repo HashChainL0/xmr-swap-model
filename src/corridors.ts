@@ -72,12 +72,28 @@ export function corridorList(): Corridor[] {
   return Object.values(CORRIDORS).sort((a, b) => a.order - b.order);
 }
 
+const CORRIDOR_IDS: readonly CorridorId[] = ["robinhood-chain", "base", "ethereum"];
+
+/** True when a runtime value names a known corridor. */
+export function isCorridorId(value: unknown): value is CorridorId {
+  return typeof value === "string" && (CORRIDOR_IDS as readonly string[]).includes(value);
+}
+
+/** Narrows a string, for example a command line argument, to a corridor id or throws with the valid ids. */
+export function parseCorridorId(value: string): CorridorId {
+  if (!isCorridorId(value)) {
+    throw new RangeError(`unknown corridor "${value}", expected one of: ${corridorList().map((c) => c.id).join(", ")}`);
+  }
+  return value;
+}
+
 export function getCorridor(id: CorridorId): Corridor {
+  if (!isCorridorId(id)) throw new RangeError(`unknown corridor "${String(id)}"`);
   return CORRIDORS[id];
 }
 
 export function corridorProfile(id: CorridorId): ChainProfile {
-  return CHAIN_PROFILES[CORRIDORS[id].profile];
+  return CHAIN_PROFILES[getCorridor(id).profile];
 }
 
 /** T0, T1 and the claim safety margin for one corridor, with optional overrides of any window input. */

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  CHAIN_PROFILES, CORRIDORS, DIRECTIONS, corridorList, corridorProfile, corridorWindows, getCorridor, recommendWindows,
+  CHAIN_PROFILES, CORRIDORS, DIRECTIONS, corridorList, corridorProfile, corridorWindows, getCorridor, isCorridorId, parseCorridorId, recommendWindows,
 } from "../src/index.js";
 import type { CorridorId } from "../src/index.js";
 
@@ -43,5 +43,19 @@ describe("corridors", () => {
   });
   it("rejects bad overrides", () => {
     expect(() => corridorWindows("base", { congestionFactor: 0.5 })).toThrow(RangeError);
+  });
+  it("isCorridorId accepts only the three corridor ids", () => {
+    for (const id of ids) expect(isCorridorId(id)).toBe(true);
+    for (const bad of ["Base", "arbitrum", "", "toString", "__proto__", 3, null, undefined]) expect(isCorridorId(bad)).toBe(false);
+  });
+  it("parseCorridorId returns a known id and names the valid ids on failure", () => {
+    expect(parseCorridorId("base")).toBe("base");
+    expect(() => parseCorridorId("optimism")).toThrow(RangeError);
+    expect(() => parseCorridorId("optimism")).toThrow(/robinhood-chain, base, ethereum/);
+  });
+  it("lookups reject an unknown id instead of returning undefined", () => {
+    expect(() => getCorridor("constructor" as CorridorId)).toThrow(RangeError);
+    expect(() => corridorProfile("nope" as CorridorId)).toThrow(RangeError);
+    expect(() => corridorWindows("nope" as CorridorId)).toThrow(RangeError);
   });
 });
