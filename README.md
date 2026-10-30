@@ -95,6 +95,7 @@ Taken from the spec: ETH holder (secret `a`, point `A`), XMR holder (secret `b`,
 | `docs/CORRIDORS.md` | The three direct corridors and what changes between them |
 | `docs/API.md` | Public exports by module, conventions and error handling |
 | `docs/GLOSSARY.md` | The terms used in the code and the docs |
+| `docs/WALKTHROUGH.md` | The default numbers worked through, step by step |
 | `docs/THREAT-NOTES.md` | Failure shapes the model shows, and what it leaves out |
 
 ## Spec
