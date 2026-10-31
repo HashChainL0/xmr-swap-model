@@ -15,9 +15,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - `docs/API.md`, a map of the public exports by module with the argument and error conventions.
 - `corridorGasLimit`, the claim gas limit for a corridor. The data posting component counts only where the corridor profile charges it inside the gas limit. The `corridors` example prints it.
+- Gas drip, claim safety property and outcome summary tests.
+- `docs/GLOSSARY.md`, `docs/THREAT-NOTES.md` and `docs/WALKTHROUGH.md`.
+- `npm run check`, which runs typecheck, tests and build.
 
 ### Changed
 
+- JSDoc on the timelock calculator exports. No behavior change.
+- CI now also runs the build.
 - `getCorridor`, `corridorProfile` and `corridorWindows` now throw a `RangeError` for an unknown corridor id instead of failing later on an undefined value.
 
 ## [0.2.0] - 2026-10-22
