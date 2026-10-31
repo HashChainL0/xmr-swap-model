@@ -18,6 +18,7 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
+    "check": "npm run typecheck && npm test && npm run build",
     "example:happy-path": "npm run --silent build && node dist/examples/happy-path.js",
     "example:refund": "npm run --silent build && node dist/examples/refund.js",
     "example:punish": "npm run --silent build && node dist/examples/punish.js",

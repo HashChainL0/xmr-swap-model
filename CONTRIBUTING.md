@@ -18,7 +18,7 @@ This applies only after a written agreement.
 
 1. Create a branch.
 2. Change one topic per pull request.
-3. Run `npm run typecheck` and `npm test`. Both must pass.
+3. Run `npm run typecheck` and `npm test`. Both must pass. `npm run check` runs both and the build in one go.
 4. If you change a transition, update `docs/STATE-MACHINE.md` and add or change tests, including the invalid cases.
 5. Explain in the description what changed and why, and link the spec section it follows.
 
