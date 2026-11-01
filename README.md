@@ -97,6 +97,7 @@ Taken from the spec: ETH holder (secret `a`, point `A`), XMR holder (secret `b`,
 | `docs/GLOSSARY.md` | The terms used in the code and the docs |
 | `docs/WALKTHROUGH.md` | The default numbers worked through, step by step |
 | `docs/THREAT-NOTES.md` | Failure shapes the model shows, and what it leaves out |
+| `docs/FAQ.md` | Short answers to common questions |
 
 ## Spec
 
