@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Corridors in `src/corridors.ts`: direct ETH<>XMR pairs in priority order, Robinhood Chain first, Base second and Ethereum mainnet third. Each corridor uses one chain profile, offers both directions and never routes through another chain. `corridorList`, `getCorridor`, `corridorProfile` and `corridorWindows` expose them.
 - `docs/CORRIDORS.md`, the `corridors` example and the `example:corridors` npm script.
+- `docs/FAQ.md`, short answers to common questions about the model, linked from the README.
 - Vitest suite for corridor order, direct routing, profile assignment and window validity.
 - `isCorridorId` and `parseCorridorId` to narrow runtime strings to a corridor id. `parseCorridorId` throws a `RangeError` that lists the valid ids.
 
